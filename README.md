@@ -1,50 +1,139 @@
-import cv2
-import matplotlib.pyplot as plt
-config_file ='ssd_mobilenet_v3_large_coco_2020_01_14.pbtxt'
-frozen_model ='frozen_inference_graph.pb'
-model=cv2.dnn_DetectionModel(frozen_model,config_file)
-classLabels=[]
-file_name='labels.txt'
-with open(file_name,'rt') as fpt:
-    classLabels = fpt.read().rstrip('\n').split('\n')
-    #classlabels.append(fpt.read())
-    print(len(classLabels))
-    model.setInputSize(320,320)
-model.setInputScale(1.0/127.5)
-model.setInputMean((127.5,127.5,127,5))
-model.setInputSwapRB(True)
-img = cv2.imread('man with car01.jpg')
-plt.imshow(img)#bgr
-plt.imshow(cv2.cvtColor(img,cv2.COLOR_BGR2RGB))
- ClassIndex, confidece, bbox = model.detect(img,confThreshold=0.5)
- print(ClassIndex)
- font_scale = 3
-font = cv2.FONT_HERSHEY_PLAIN
-for ClassInd,conf, boxes in zip(ClassIndex.flatten(), confidece.flatten(), bbox):
-    cv2.rectangle(img,boxes,(255,0, 0), 2)
-    cv2.putText(img,classLabels[ClassInd-1],(boxes[0]+10,boxes[1]+40), font,fontScale=font_scale,color=(0, 255, 0), thickness=4)
-    
-  plt.imshow(cv2.cvtColor(img,cv2.COLOR_BGR2RGB))
-  cap = cv2.VideoCapture("First Time Travel Guide To London Ft. Kamiya Jani _ Curly Tales.mp4")
-if not cap.isOpened():
-    cap= cv2.VideoCapture(0)
-if not cap.isOpened():
-    raise IOError("cannot open video")
+**Object Detection Model**
 
-font_scale =3
-font = cv2.FONT_HERSHEY_PLAIN
-while True:
-    ret,frame = cap.read()
-    ClassIndex, confidece, bbox = model.detect(frame,confThreshold=0.55)
-    print(ClassIndex)
-    if (len(ClassIndex)!=0):
-        for ClassInd, conf, boxes in zip(ClassIndex.flatten(), confidece.flatten(), bbox):
-            if (ClassInd<=80):
-                cv2.rectangle(frame,boxes,(255, 0, 0),2)
-                cv2.putText(frame,classLabels[ClassInd-1],(boxes[0]+10,boxes[1]+40), font, fontScale=font_scale,color=(0, 255, 0))
-    cv2.imshow('Object Detection Tutorial',frame)
-    if cv2.waitKey(2) & 0xFF == ord('q'):
-        break
-cap.release()
-cv2.destroyallwindons()
-    
+**Overview**
+
+This project implements an Object Detection model using Python to identify objects in images, videos, and real-time camera feeds. The model leverages deep learning frameworks such as TensorFlow or OpenCV with pre-trained models like YOLO, SSD, or Faster R-CNN.
+
+**Features**
+
+Detects objects in images
+
+Detects objects in video files
+
+Real-time object detection using a webcam or external camera
+
+Supports multiple object detection models
+
+**Installation Prerequisites**
+
+Ensure you have Python installed (recommended: Python 3.7 or later). Install the required dependencies:
+
+pip install opencv-python numpy tensorflow torch torchvision
+
+**Usage**
+
+1. Object Detection in Images
+
+python detect.py --image path/to/image.jpg
+
+2. Object Detection in Videos
+
+python detect.py --video path/to/video.mp4
+
+3. Real-Time Object Detection Using Camera
+
+python detect.py --camera 0  # Use 0 for the default webcam
+
+**Implementation Details**
+
+The model uses:
+
+YOLOv5: For fast and accurate detection
+
+OpenCV: For image and video processing
+
+TensorFlow/PyTorch: For deep learning-based detection models
+
+Example Output
+
+The model draws bounding boxes around detected objects with confidence scores.
+
+The processed images/videos are saved in the output/ folder.
+
+Configuration
+
+You can modify parameters like confidence threshold, input size, and output directory in config.py.
+
+Future Enhancements
+
+Add support for custom-trained models
+
+Improve inference speed with model optimization
+
+Support for multi-camera input
+
+**License**
+This project is licensed under the MIT License.
+
+Object Detection Model
+
+Overview
+
+This project implements an Object Detection model using Python to identify objects in images, videos, and real-time camera feeds. The model leverages deep learning frameworks such as TensorFlow or OpenCV with pre-trained models like YOLO, SSD, or Faster R-CNN.
+
+Features
+
+Detects objects in images
+
+Detects objects in video files
+
+Real-time object detection using a webcam or external camera
+
+Supports multiple object detection models
+
+Installation
+
+Prerequisites
+
+Ensure you have Python installed (recommended: Python 3.7 or later). Install the required dependencies:
+
+pip install opencv-python numpy tensorflow torch torchvision
+
+Usage
+
+1. Object Detection in Images
+
+python detect.py --image path/to/image.jpg
+
+2. Object Detection in Videos
+
+python detect.py --video path/to/video.mp4
+
+3. Real-Time Object Detection Using Camera
+
+python detect.py --camera 0  # Use 0 for the default webcam
+
+Implementation Details
+
+The model uses:
+
+YOLOv5: For fast and accurate detection
+
+OpenCV: For image and video processing
+
+TensorFlow/PyTorch: For deep learning-based detection models
+
+Example Output
+
+The model draws bounding boxes around detected objects with confidence scores.
+
+The processed images/videos are saved in the output/ folder.
+
+**Configuration**
+You can modify parameters like confidence threshold, input size, and output directory in config.py.
+
+Future Enhancements
+
+Add support for custom-trained models
+
+Improve inference speed with model optimization
+
+Support for multi-camera input
+
+**License**
+
+This project is licensed under the MIT License.
+
+**Contact**
+
+For issues or contributions, feel free to raise an issue or submit a pull request on GitHub.
